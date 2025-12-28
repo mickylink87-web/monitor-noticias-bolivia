@@ -38,3 +38,35 @@ else:
                 st.write(art['description'])
                 st.markdown(f"[Leer noticia completa]({art['url']})")
             st.markdown("---")
+from fpdf import FPDF
+
+# Función para generar el PDF
+def generar_pdf(noticias):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", 'B', 16)
+    pdf.cell(200, 10, txt="Reporte Diario de Noticias - Bolivia", ln=True, align='C')
+    pdf.ln(10)
+    
+    for art in noticias:
+        pdf.set_font("Arial", 'B', 12)
+        # Limpiamos el texto para evitar errores de caracteres especiales
+        titulo = art['title'].encode('latin-1', 'ignore').decode('latin-1')
+        pdf.multi_cell(0, 10, txt=titulo)
+        
+        pdf.set_font("Arial", '', 10)
+        fuente = f"Fuente: {art['source']['name']} - {art['publishedAt'][:10]}"
+        pdf.cell(0, 10, txt=fuente, ln=True)
+        pdf.ln(5)
+        
+    return pdf.output(dest='S').encode('latin-1')
+
+# Botón de descarga en la interfaz de Streamlit
+if noticias:
+    pdf_data = generar_pdf(noticias)
+    st.download_button(
+        label="📥 Descargar Reporte en PDF",
+        data=pdf_data,
+        file_name="reporte_noticias_bolivia.pdf",
+        mime="application/pdf"
+    )
