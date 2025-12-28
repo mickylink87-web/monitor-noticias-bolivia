@@ -9,7 +9,7 @@ st.title("🕵️‍♂️ Monitor de Noticias: Seguridad y Narcotráfico")
 st.markdown("---")
 
 # Tu API Key de NewsAPI
-API_KEY = "58af0eee6902477c9c63d8af2fae2fca"
+API_KEY = st.secrets["NEWS_API_KEY"]
 TOPIC = "bolivia AND (droga OR narcotrafico OR incautacion)"
 @st.cache_data(ttl=3600)  # Esto hace que la app solo busque noticias nuevas una vez por hora
 def buscar_noticias():
